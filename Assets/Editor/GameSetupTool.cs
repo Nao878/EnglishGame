@@ -8,9 +8,18 @@ using TMPro;
 /// </summary>
 public class GameSetupTool : EditorWindow
 {
+    private static TMP_FontAsset appFont;
+
     [MenuItem("Tools/Setup English Word Tetris")]
     public static void SetupScene()
     {
+        // フォントを読み込む
+        appFont = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/TextMesh Pro/Fonts/AppFont SDF.asset");
+        if (appFont == null)
+        {
+            Debug.LogWarning("AppFont SDF not found. Using default font.");
+        }
+
         // 既存のゲームオブジェクトを削除
         CleanupExistingObjects();
 
@@ -188,10 +197,11 @@ public class GameSetupTool : EditorWindow
         obj.transform.SetParent(parent);
 
         RectTransform rect = obj.AddComponent<RectTransform>();
-        rect.anchorMin = Vector2.zero;
-        rect.anchorMax = Vector2.zero;
-        rect.pivot = Vector2.zero;
-        rect.anchoredPosition = new Vector2(0, 0);
+        // 中央を基準にしてブロックを配置（PlayAreaと同じアンカー）
+        rect.anchorMin = new Vector2(0.5f, 0.5f);
+        rect.anchorMax = new Vector2(0.5f, 0.5f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+        rect.anchoredPosition = Vector2.zero;
         rect.sizeDelta = Vector2.zero;
 
         return obj;
@@ -242,6 +252,7 @@ public class GameSetupTool : EditorWindow
         scoreText.color = Color.white;
         scoreText.alignment = TextAlignmentOptions.Center;
         scoreText.fontStyle = FontStyles.Bold;
+        if (appFont != null) scoreText.font = appFont;
 
         gameManager.scoreText = scoreText;
 
@@ -261,6 +272,7 @@ public class GameSetupTool : EditorWindow
         instructionText.fontSize = 24;
         instructionText.color = new Color(0.7f, 0.7f, 0.7f);
         instructionText.alignment = TextAlignmentOptions.Center;
+        if (appFont != null) instructionText.font = appFont;
 
         // ゲームオーバーパネル
         CreateGameOverPanel(parent, gameManager);
@@ -300,6 +312,7 @@ public class GameSetupTool : EditorWindow
         titleText.color = new Color(0.9f, 0.3f, 0.3f);
         titleText.alignment = TextAlignmentOptions.Center;
         titleText.fontStyle = FontStyles.Bold;
+        if (appFont != null) titleText.font = appFont;
 
         // 最終スコア
         GameObject finalScoreObj = new GameObject("FinalScoreText");
@@ -317,6 +330,7 @@ public class GameSetupTool : EditorWindow
         finalScoreText.fontSize = 32;
         finalScoreText.color = Color.white;
         finalScoreText.alignment = TextAlignmentOptions.Center;
+        if (appFont != null) finalScoreText.font = appFont;
 
         gameManager.gameOverScoreText = finalScoreText;
 
@@ -359,6 +373,7 @@ public class GameSetupTool : EditorWindow
         buttonText.fontSize = 24;
         buttonText.color = Color.white;
         buttonText.alignment = TextAlignmentOptions.Center;
+        if (appFont != null) buttonText.font = appFont;
     }
 
     private static void CreatePrefabs(GameManager gameManager)
@@ -406,6 +421,7 @@ public class GameSetupTool : EditorWindow
         text.alignment = TextAlignmentOptions.Center;
         text.color = Color.white;
         text.fontSize = 32;
+        if (appFont != null) text.font = appFont;
 
         block.textComponent = text;
 
@@ -448,6 +464,7 @@ public class GameSetupTool : EditorWindow
         text.alignment = TextAlignmentOptions.Center;
         text.color = Color.white;
         text.fontSize = 28;
+        if (appFont != null) text.font = appFont;
 
         block.textComponent = text;
 

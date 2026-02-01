@@ -194,7 +194,9 @@ public class GridManager : MonoBehaviour
         // X座標でソート
         rowBlocks.Sort((a, b) => a.GetLeftEdgeX().CompareTo(b.GetLeftEdgeX()));
 
-        float currentX = 0;
+        // PlayArea中央基準：左端は -playAreaWidth/2
+        float playAreaWidth = GetPlayAreaWidth();
+        float currentX = -playAreaWidth / 2f;
         foreach (var block in rowBlocks)
         {
             block.SetPositionX(currentX);
@@ -225,7 +227,9 @@ public class GridManager : MonoBehaviour
     /// </summary>
     public bool IsGameOverCondition()
     {
-        float rightBoundary = (columns - 1) * cellSize;
+        // PlayArea中央基準：右端は +playAreaWidth/2
+        float playAreaWidth = GetPlayAreaWidth();
+        float rightBoundary = playAreaWidth / 2f - cellSize;
 
         foreach (var block in japaneseBlocks)
         {

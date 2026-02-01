@@ -33,6 +33,10 @@ public class GameManager : MonoBehaviour
     private bool isPlaying = false;
     private float cellSize = 80f;
     private List<WordPair> currentWordPairs;
+    
+    // 現在配置されている英単語に対応する日本語ブロックのキュー
+    private Queue<WordPair> japaneseBlockQueue;
+    private List<WordPair> activeEnglishWords;
 
     public bool IsPlaying => isPlaying;
 
@@ -82,11 +86,32 @@ public class GameManager : MonoBehaviour
         if (wordDictionary != null)
         {
             currentWordPairs = wordDictionary.GetRandomPairs(initialBlockCount);
+            activeEnglishWords = new List<WordPair>(currentWordPairs);
+            
+            // 日本語ブロックのキューを作成（シャッフルして順番をランダムに）
+            List<WordPair> shuffledPairs = new List<WordPair>(currentWordPairs);
+            ShuffleList(shuffledPairs);
+            japaneseBlockQueue = new Queue<WordPair>(shuffledPairs);
+            
             SpawnInitialBlocks();
         }
         else
         {
             Debug.LogError("WordDictionary is not assigned!");
+        }
+    }
+
+    /// <summary>
+    /// リストをシャッフル
+    /// </summary>
+    private void ShuffleList<T>(List<T> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            T temp = list[i];
+            list[i] = list[j];
+            list[j] = temp;
         }
     }
 
@@ -129,18 +154,38 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void SpawnNextBlock()
     {
-        if (!isPlaying || wordDictionary == null)
+        if (!isPlaying)
             return;
 
-        // ランダムな単語ペアを取得
-        WordPair pair = wordDictionary.GetRandomPair();
-        if (pair == null)
+        // キューが空の場合はゲームクリア（すべて消去した）
+        if (japaneseBlockQueue == null || japaneseBlockQueue.Count == 0)
+        {
+            // ゲームクリア処理
+            GameClear();
             return;
+        }
 
-        // ランダムな行に配置
-        int row = Random.Range(0, GridManager.Instance.rows);
+        // キューから次の単語ペアを取得
+        WordPair pair = japaneseBlockQueue.Dequeue();
+
+        // 対応する英単語の行を探す（または最初の空いている行）
+        int row = FindRowForEnglishWord(pair.englishWord);
+        if (row == -1)
+        {
+            row = Random.Range(0, GridManager.Instance.rows);
+        }
 
         SpawnJapaneseBlock(pair, row);
+    }
+
+    /// <summary>
+    /// 指定した英単語が配置されている行を探す
+    /// </summary>
+    private int FindRowForEnglishWord(string englishWord)
+    {
+        // GridManagerから英単語ブロックを探す
+        // 注: 実際には行を指定せず、プレイヤーに選ばせる
+        return Random.Range(0, GridManager.Instance.rows);
     }
 
     /// <summary>
@@ -156,8 +201,9 @@ public class GameManager : MonoBehaviour
 
         if (block != null)
         {
-            // 右端からスタート
-            float startX = GridManager.Instance.GetPlayAreaWidth() - cellSize / 2f;
+            // 右端からスタート（PlayArea中央基準で右端は +playAreaWidth/2）
+            float playAreaWidth = GridManager.Instance.GetPlayAreaWidth();
+            float startX = playAreaWidth / 2f - cellSize / 2f;
             block.Initialize(pair.japaneseWord, pair.englishWord, row, cellSize, startX);
         }
     }
@@ -179,6 +225,24 @@ public class GameManager : MonoBehaviour
         if (scoreText != null)
         {
             scoreText.text = $"Score: {score}";
+        }
+    }
+
+    /// <summary>
+    /// ゲームクリア
+    /// </summary>
+    public void GameClear()
+    {
+        isPlaying = false;
+
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(true);
+        }
+
+        if (gameOverScoreText != null)
+        {
+            gameOverScoreText.text = $"CLEAR! Score: {score}";
         }
     }
 

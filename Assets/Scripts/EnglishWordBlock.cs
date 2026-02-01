@@ -59,9 +59,13 @@ public class EnglishWordBlock : MonoBehaviour
             textComponent.fontSize = cellSize * 0.4f;
         }
 
-        // 位置を設定（左端からスタート）
-        float x = width / 2f;
-        float y = -rowIndex * cellSize - cellSize / 2f;
+        // 位置を設定（PlayArea中央を基準に配置）
+        // X: 左端からスタート（PlayAreaの左端 + ブロック幅の半分）
+        float playAreaWidth = GridManager.Instance.GetPlayAreaWidth();
+        float playAreaHeight = GridManager.Instance.GetPlayAreaHeight();
+        float x = -playAreaWidth / 2f + width / 2f;
+        // Y: 上から順に配置（PlayAreaの上端から各行へ）
+        float y = playAreaHeight / 2f - rowIndex * cellSize - cellSize / 2f;
         rectTransform.anchoredPosition = new Vector2(x, y);
 
         // GridManagerに登録

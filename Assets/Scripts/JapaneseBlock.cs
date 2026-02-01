@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using TMPro;
 
 /// <summary>
@@ -31,6 +32,10 @@ public class JapaneseBlock : MonoBehaviour
     private bool isFixed = false;
     private bool isAccelerating = false;
     private GameManager gameManager;
+
+    // Input System用
+    private bool upKeyPressed = false;
+    private bool downKeyPressed = false;
 
     public int Row => row;
     public bool IsFixed => isFixed;
@@ -84,8 +89,9 @@ public class JapaneseBlock : MonoBehaviour
             textComponent.fontSize = cellSize * 0.35f;
         }
 
-        // 位置を設定（右端からスタート）
-        float y = -rowIndex * cellSize - cellSize / 2f;
+        // 位置を設定（PlayArea中央を基準に配置）
+        float playAreaHeight = GridManager.Instance.GetPlayAreaHeight();
+        float y = playAreaHeight / 2f - rowIndex * cellSize - cellSize / 2f;
         rectTransform.anchoredPosition = new Vector2(startX, y);
 
         // GridManagerに登録
@@ -96,22 +102,26 @@ public class JapaneseBlock : MonoBehaviour
     }
 
     /// <summary>
-    /// 入力処理
+    /// 入力処理（Input System対応）
     /// </summary>
     private void HandleInput()
     {
-        // 上下キーで行を移動
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard == null) return;
+
+        // 上キーで上の行へ移動
+        if (keyboard.upArrowKey.wasPressedThisFrame)
         {
             MoveRow(-1);
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow))
+        // 下キーで下の行へ移動
+        else if (keyboard.downArrowKey.wasPressedThisFrame)
         {
             MoveRow(1);
         }
 
         // スペースキーで加速
-        isAccelerating = Input.GetKey(KeyCode.Space);
+        isAccelerating = keyboard.spaceKey.isPressed;
     }
 
     /// <summary>
@@ -123,7 +133,8 @@ public class JapaneseBlock : MonoBehaviour
         if (newRow >= 0 && newRow < GridManager.Instance.rows)
         {
             row = newRow;
-            float y = -row * cellSize - cellSize / 2f;
+            float playAreaHeight = GridManager.Instance.GetPlayAreaHeight();
+            float y = playAreaHeight / 2f - row * cellSize - cellSize / 2f;
             rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, y);
         }
     }
@@ -172,10 +183,12 @@ public class JapaneseBlock : MonoBehaviour
             return;
         }
 
-        // 左端到達チェック
-        if (leftEdge <= 0)
+        // 左端到達チェック（PlayArea左端は -playAreaWidth/2）
+        float playAreaWidth = GridManager.Instance.GetPlayAreaWidth();
+        float leftBoundary = -playAreaWidth / 2f;
+        if (leftEdge <= leftBoundary)
         {
-            rectTransform.anchoredPosition = new Vector2(cellSize / 2f, rectTransform.anchoredPosition.y);
+            rectTransform.anchoredPosition = new Vector2(leftBoundary + cellSize / 2f, rectTransform.anchoredPosition.y);
             FixBlock();
         }
     }
