@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bb1670118f6b2047b6ecd362a549315, type: 3}
+  m_Name: WordDictionary
+  m_EditorClassIdentifier: Assembly-CSharp::WordDictionary
+  wordPairs:
+  - englishWord: apple
+    japaneseWord: "\u308A\u3093\u3054"
+  - englishWord: book
+    japaneseWord: "\u672C"
+  - englishWord: cat
+    japaneseWord: "\u306D\u3053"
+  - englishWord: dog
+    japaneseWord: "\u3044\u306C"
+  - englishWord: fish
+    japaneseWord: "\u3055\u304B\u306A"
+  - englishWord: egg
+    japaneseWord: "\u305F\u307E\u3054"
+  - englishWord: hand
+    japaneseWord: "\u624B"
+  - englishWord: ice
+    japaneseWord: "\u6C37"
+  - englishWord: jump
+    japaneseWord: "\u3068\u3076"
+  - englishWord: king
+    japaneseWord: "\u738B\u69D8"
+  - englishWord: lion
+    japaneseWord: "\u30E9\u30A4\u30AA\u30F3"
+  - englishWord: moon
+    japaneseWord: "\u6708"
+  - englishWord: nose
+    japaneseWord: "\u9F3B"
+  - englishWord: orange
+    japaneseWord: "\u30AA\u30EC\u30F3\u30B8"
+  - englishWord: pen
+    japaneseWord: "\u30DA\u30F3"
+  - englishWord: queen
+    japaneseWord: "\u5973\u738B"
+  - englishWord: rain
+    japaneseWord: "\u96E8"
+  - englishWord: sun
+    japaneseWord: "\u592A\u967D"
+  - englishWord: tree
+    japaneseWord: "\u6728"
+  - englishWord: water
+    japaneseWord: "\u6C34"
