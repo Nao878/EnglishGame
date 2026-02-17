@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bb1670118f6b2047b6ecd362a549315, type: 3}
   m_Name: WordDictionary
   m_EditorClassIdentifier: Assembly-CSharp::WordDictionary
-  wordPairs:
+  easyWordPairs:
   - englishWord: apple
     japaneseWord: "\u308A\u3093\u3054"
   - englishWord: book
@@ -53,3 +53,116 @@ MonoBehaviour:
     japaneseWord: "\u6728"
   - englishWord: water
     japaneseWord: "\u6C34"
+  juniorHigh1WordPairs:
+  - englishWord: school
+    japaneseWord: "\u5B66\u6821"
+  - englishWord: student
+    japaneseWord: "\u751F\u5F92"
+  - englishWord: teacher
+    japaneseWord: "\u5148\u751F"
+  - englishWord: friend
+    japaneseWord: "\u53CB\u9054"
+  - englishWord: family
+    japaneseWord: "\u5BB6\u65CF"
+  - englishWord: mother
+    japaneseWord: "\u6BCD"
+  - englishWord: father
+    japaneseWord: "\u7236"
+  - englishWord: sister
+    japaneseWord: "\u59C9\u59B9"
+  - englishWord: brother
+    japaneseWord: "\u5144\u5F1F"
+  - englishWord: morning
+    japaneseWord: "\u671D"
+  - englishWord: study
+    japaneseWord: "\u52C9\u5F37\u3059\u308B"
+  - englishWord: speak
+    japaneseWord: "\u8A71\u3059"
+  - englishWord: listen
+    japaneseWord: "\u805E\u304F"
+  - englishWord: write
+    japaneseWord: "\u66F8\u304F"
+  - englishWord: read
+    japaneseWord: "\u8AAD\u3080"
+  - englishWord: play
+    japaneseWord: "\u904A\u3076"
+  - englishWord: walk
+    japaneseWord: "\u6B69\u304F"
+  - englishWord: run
+    japaneseWord: "\u8D70\u308B"
+  - englishWord: eat
+    japaneseWord: "\u98DF\u3079\u308B"
+  - englishWord: drink
+    japaneseWord: "\u98F2\u3080"
+  - englishWord: good
+    japaneseWord: "\u826F\u3044"
+  - englishWord: bad
+    japaneseWord: "\u60AA\u3044"
+  - englishWord: big
+    japaneseWord: "\u5927\u304D\u3044"
+  - englishWord: small
+    japaneseWord: "\u5C0F\u3055\u3044"
+  - englishWord: new
+    japaneseWord: "\u65B0\u3057\u3044"
+  - englishWord: old
+    japaneseWord: "\u53E4\u3044"
+  - englishWord: happy
+    japaneseWord: "\u5E78\u305B"
+  - englishWord: sad
+    japaneseWord: "\u60B2\u3057\u3044"
+  - englishWord: Monday
+    japaneseWord: "\u6708\u66DC\u65E5"
+  - englishWord: Tuesday
+    japaneseWord: "\u706B\u66DC\u65E5"
+  - englishWord: Wednesday
+    japaneseWord: "\u6C34\u66DC\u65E5"
+  - englishWord: Thursday
+    japaneseWord: "\u6728\u66DC\u65E5"
+  - englishWord: Friday
+    japaneseWord: "\u91D1\u66DC\u65E5"
+  - englishWord: Saturday
+    japaneseWord: "\u571F\u66DC\u65E5"
+  - englishWord: Sunday
+    japaneseWord: "\u65E5\u66DC\u65E5"
+  - englishWord: today
+    japaneseWord: "\u4ECA\u65E5"
+  - englishWord: tomorrow
+    japaneseWord: "\u660E\u65E5"
+  - englishWord: yesterday
+    japaneseWord: "\u6628\u65E5"
+  - englishWord: one
+    japaneseWord: 1
+  - englishWord: two
+    japaneseWord: 2
+  - englishWord: three
+    japaneseWord: 3
+  - englishWord: four
+    japaneseWord: 4
+  - englishWord: five
+    japaneseWord: 5
+  - englishWord: six
+    japaneseWord: 6
+  - englishWord: seven
+    japaneseWord: 7
+  - englishWord: eight
+    japaneseWord: 8
+  - englishWord: nine
+    japaneseWord: 9
+  - englishWord: ten
+    japaneseWord: 10
+  - englishWord: house
+    japaneseWord: "\u5BB6"
+  - englishWord: room
+    japaneseWord: "\u90E8\u5C4B"
+  - englishWord: desk
+    japaneseWord: "\u673A"
+  - englishWord: chair
+    japaneseWord: "\u6905\u5B50"
+  - englishWord: window
+    japaneseWord: "\u7A93"
+  - englishWord: door
+    japaneseWord: "\u30C9\u30A2"
+  - englishWord: bag
+    japaneseWord: "\u304B\u3070\u3093"
+  - englishWord: clock
+    japaneseWord: "\u6642\u8A08"

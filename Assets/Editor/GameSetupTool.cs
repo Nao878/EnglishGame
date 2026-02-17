@@ -86,15 +86,17 @@ public class GameSetupTool : EditorWindow
             AssetDatabase.CreateFolder("Assets", "Data");
         }
 
-        // 既存のアセットを取得または新規作成
+        // 既存のアセットを削除して新規作成（モード対応のため）
         WordDictionary wordDictionary = AssetDatabase.LoadAssetAtPath<WordDictionary>(path);
-        if (wordDictionary == null)
+        if (wordDictionary != null)
         {
-            wordDictionary = ScriptableObject.CreateInstance<WordDictionary>();
-            wordDictionary.InitializeDefaultData();
-            AssetDatabase.CreateAsset(wordDictionary, path);
-            AssetDatabase.SaveAssets();
+            AssetDatabase.DeleteAsset(path);
         }
+        
+        wordDictionary = ScriptableObject.CreateInstance<WordDictionary>();
+        wordDictionary.InitializeAllData();
+        AssetDatabase.CreateAsset(wordDictionary, path);
+        AssetDatabase.SaveAssets();
 
         return wordDictionary;
     }
@@ -243,8 +245,8 @@ public class GameSetupTool : EditorWindow
         scoreRect.anchorMin = new Vector2(0.5f, 1f);
         scoreRect.anchorMax = new Vector2(0.5f, 1f);
         scoreRect.pivot = new Vector2(0.5f, 1f);
-        scoreRect.anchoredPosition = new Vector2(0, -20);
-        scoreRect.sizeDelta = new Vector2(400, 60);
+        scoreRect.anchoredPosition = new Vector2(-150, -20);
+        scoreRect.sizeDelta = new Vector2(300, 60);
 
         TextMeshProUGUI scoreText = scoreObj.AddComponent<TextMeshProUGUI>();
         scoreText.text = "Score: 0";
@@ -255,6 +257,26 @@ public class GameSetupTool : EditorWindow
         if (appFont != null) scoreText.font = appFont;
 
         gameManager.scoreText = scoreText;
+
+        // モード表示
+        GameObject modeObj = new GameObject("ModeText");
+        modeObj.transform.SetParent(parent);
+
+        RectTransform modeRect = modeObj.AddComponent<RectTransform>();
+        modeRect.anchorMin = new Vector2(0.5f, 1f);
+        modeRect.anchorMax = new Vector2(0.5f, 1f);
+        modeRect.pivot = new Vector2(0.5f, 1f);
+        modeRect.anchoredPosition = new Vector2(150, -20);
+        modeRect.sizeDelta = new Vector2(300, 60);
+
+        TextMeshProUGUI modeText = modeObj.AddComponent<TextMeshProUGUI>();
+        modeText.text = "モード: かんたん";
+        modeText.fontSize = 28;
+        modeText.color = new Color(0.9f, 0.9f, 0.5f);
+        modeText.alignment = TextAlignmentOptions.Center;
+        if (appFont != null) modeText.font = appFont;
+
+        gameManager.modeText = modeText;
 
         // 操作説明
         GameObject instructionObj = new GameObject("InstructionText");
@@ -303,7 +325,7 @@ public class GameSetupTool : EditorWindow
         titleRect.anchorMin = new Vector2(0.5f, 0.5f);
         titleRect.anchorMax = new Vector2(0.5f, 0.5f);
         titleRect.pivot = new Vector2(0.5f, 0.5f);
-        titleRect.anchoredPosition = new Vector2(0, 80);
+        titleRect.anchoredPosition = new Vector2(0, 120);
         titleRect.sizeDelta = new Vector2(400, 80);
 
         TextMeshProUGUI titleText = titleObj.AddComponent<TextMeshProUGUI>();
@@ -322,7 +344,7 @@ public class GameSetupTool : EditorWindow
         finalScoreRect.anchorMin = new Vector2(0.5f, 0.5f);
         finalScoreRect.anchorMax = new Vector2(0.5f, 0.5f);
         finalScoreRect.pivot = new Vector2(0.5f, 0.5f);
-        finalScoreRect.anchoredPosition = new Vector2(0, 10);
+        finalScoreRect.anchoredPosition = new Vector2(0, 50);
         finalScoreRect.sizeDelta = new Vector2(400, 50);
 
         TextMeshProUGUI finalScoreText = finalScoreObj.AddComponent<TextMeshProUGUI>();
@@ -334,7 +356,31 @@ public class GameSetupTool : EditorWindow
 
         gameManager.gameOverScoreText = finalScoreText;
 
-        // リスタートボタン
+        // モード選択ラベル
+        GameObject modeLabelObj = new GameObject("ModeLabel");
+        modeLabelObj.transform.SetParent(panelObj.transform);
+
+        RectTransform modeLabelRect = modeLabelObj.AddComponent<RectTransform>();
+        modeLabelRect.anchorMin = new Vector2(0.5f, 0.5f);
+        modeLabelRect.anchorMax = new Vector2(0.5f, 0.5f);
+        modeLabelRect.pivot = new Vector2(0.5f, 0.5f);
+        modeLabelRect.anchoredPosition = new Vector2(0, -10);
+        modeLabelRect.sizeDelta = new Vector2(400, 40);
+
+        TextMeshProUGUI modeLabelText = modeLabelObj.AddComponent<TextMeshProUGUI>();
+        modeLabelText.text = "モードを選択";
+        modeLabelText.fontSize = 24;
+        modeLabelText.color = new Color(0.8f, 0.8f, 0.8f);
+        modeLabelText.alignment = TextAlignmentOptions.Center;
+        if (appFont != null) modeLabelText.font = appFont;
+
+        // かんたんモードボタン
+        gameManager.easyModeButton = CreateModeButton(panelObj.transform, "EasyModeButton", "かんたん", new Vector2(-120, -70), new Color(0.2f, 0.7f, 0.3f));
+
+        // 中学1年生モードボタン
+        gameManager.juniorHigh1ModeButton = CreateModeButton(panelObj.transform, "JuniorHigh1ModeButton", "中学1年生", new Vector2(120, -70), new Color(0.7f, 0.4f, 0.2f));
+
+        // リスタートボタン（同じモードで再プレイ）
         GameObject buttonObj = new GameObject("RestartButton");
         buttonObj.transform.SetParent(panelObj.transform);
 
@@ -342,7 +388,7 @@ public class GameSetupTool : EditorWindow
         buttonRect.anchorMin = new Vector2(0.5f, 0.5f);
         buttonRect.anchorMax = new Vector2(0.5f, 0.5f);
         buttonRect.pivot = new Vector2(0.5f, 0.5f);
-        buttonRect.anchoredPosition = new Vector2(0, -60);
+        buttonRect.anchoredPosition = new Vector2(0, -140);
         buttonRect.sizeDelta = new Vector2(200, 50);
 
         Image buttonBg = buttonObj.AddComponent<Image>();
@@ -369,11 +415,54 @@ public class GameSetupTool : EditorWindow
         buttonTextRect.offsetMax = Vector2.zero;
 
         TextMeshProUGUI buttonText = buttonTextObj.AddComponent<TextMeshProUGUI>();
-        buttonText.text = "Restart";
+        buttonText.text = "もう一度";
         buttonText.fontSize = 24;
         buttonText.color = Color.white;
         buttonText.alignment = TextAlignmentOptions.Center;
         if (appFont != null) buttonText.font = appFont;
+    }
+
+    private static Button CreateModeButton(Transform parent, string name, string text, Vector2 position, Color bgColor)
+    {
+        GameObject buttonObj = new GameObject(name);
+        buttonObj.transform.SetParent(parent);
+
+        RectTransform buttonRect = buttonObj.AddComponent<RectTransform>();
+        buttonRect.anchorMin = new Vector2(0.5f, 0.5f);
+        buttonRect.anchorMax = new Vector2(0.5f, 0.5f);
+        buttonRect.pivot = new Vector2(0.5f, 0.5f);
+        buttonRect.anchoredPosition = position;
+        buttonRect.sizeDelta = new Vector2(200, 50);
+
+        Image buttonBg = buttonObj.AddComponent<Image>();
+        buttonBg.color = bgColor;
+
+        Button button = buttonObj.AddComponent<Button>();
+        button.targetGraphic = buttonBg;
+
+        ColorBlock colors = button.colors;
+        colors.highlightedColor = bgColor * 1.2f;
+        colors.pressedColor = bgColor * 0.8f;
+        button.colors = colors;
+
+        // ボタンテキスト
+        GameObject buttonTextObj = new GameObject("Text");
+        buttonTextObj.transform.SetParent(buttonObj.transform);
+
+        RectTransform buttonTextRect = buttonTextObj.AddComponent<RectTransform>();
+        buttonTextRect.anchorMin = Vector2.zero;
+        buttonTextRect.anchorMax = Vector2.one;
+        buttonTextRect.offsetMin = Vector2.zero;
+        buttonTextRect.offsetMax = Vector2.zero;
+
+        TextMeshProUGUI buttonText = buttonTextObj.AddComponent<TextMeshProUGUI>();
+        buttonText.text = text;
+        buttonText.fontSize = 24;
+        buttonText.color = Color.white;
+        buttonText.alignment = TextAlignmentOptions.Center;
+        if (appFont != null) buttonText.font = appFont;
+
+        return button;
     }
 
     private static void CreatePrefabs(GameManager gameManager)

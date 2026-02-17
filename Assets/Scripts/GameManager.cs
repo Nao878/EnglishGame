@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     [Header("ゲーム設定")]
     public int initialBlockCount = 8;
     public float spawnDelay = 0.5f;
+    public GameMode currentMode = GameMode.Easy;
 
     [Header("参照")]
     public WordDictionary wordDictionary;
@@ -21,9 +22,12 @@ public class GameManager : MonoBehaviour
 
     [Header("UI参照")]
     public TextMeshProUGUI scoreText;
+    public TextMeshProUGUI modeText;
     public GameObject gameOverPanel;
     public TextMeshProUGUI gameOverScoreText;
     public Button restartButton;
+    public Button easyModeButton;
+    public Button juniorHigh1ModeButton;
 
     [Header("プレハブ")]
     public GameObject englishBlockPrefab;
@@ -59,6 +63,32 @@ public class GameManager : MonoBehaviour
             restartButton.onClick.AddListener(RestartGame);
         }
 
+        if (easyModeButton != null)
+        {
+            easyModeButton.onClick.AddListener(() => StartGameWithMode(GameMode.Easy));
+        }
+
+        if (juniorHigh1ModeButton != null)
+        {
+            juniorHigh1ModeButton.onClick.AddListener(() => StartGameWithMode(GameMode.JuniorHigh1));
+        }
+
+        StartGame();
+    }
+
+    /// <summary>
+    /// 指定モードでゲームを開始
+    /// </summary>
+    public void StartGameWithMode(GameMode mode)
+    {
+        currentMode = mode;
+        
+        // すべてのブロックをクリア
+        if (GridManager.Instance != null)
+        {
+            GridManager.Instance.ClearAllBlocks();
+        }
+
         StartGame();
     }
 
@@ -70,6 +100,7 @@ public class GameManager : MonoBehaviour
         score = 0;
         isPlaying = true;
         UpdateScoreUI();
+        UpdateModeUI();
 
         if (gameOverPanel != null)
         {
@@ -82,10 +113,10 @@ public class GameManager : MonoBehaviour
             cellSize = GridManager.Instance.cellSize;
         }
 
-        // 辞書からランダムな単語ペアを取得
+        // 辞書からランダムな単語ペアを取得（現在のモードに応じて）
         if (wordDictionary != null)
         {
-            currentWordPairs = wordDictionary.GetRandomPairs(initialBlockCount);
+            currentWordPairs = wordDictionary.GetRandomPairs(initialBlockCount, currentMode);
             activeEnglishWords = new List<WordPair>(currentWordPairs);
             
             // 日本語ブロックのキューを作成（シャッフルして順番をランダムに）
@@ -225,6 +256,17 @@ public class GameManager : MonoBehaviour
         if (scoreText != null)
         {
             scoreText.text = $"Score: {score}";
+        }
+    }
+
+    /// <summary>
+    /// モードUIを更新
+    /// </summary>
+    private void UpdateModeUI()
+    {
+        if (modeText != null)
+        {
+            modeText.text = $"モード: {WordDictionary.GetModeName(currentMode)}";
         }
     }
 
